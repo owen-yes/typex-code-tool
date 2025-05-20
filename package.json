@@ -1,0 +1,17 @@
+{
+  "name": "typex-code-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "replace": "npx jscodeshift -t ./src/rename-props-type.js /Users/owen/vsprojects/typex-pc/packages/typex-pc-render/src --extensions=tsx --parser=tsx",
+    "replace:test": "npx jscodeshift -t ./src/rename-props-type.js ./test/test.tsx --extensions=tsx --parser=tsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
+  "devDependencies": {
+    "jscodeshift": "^17.3.0"
+  }
+}

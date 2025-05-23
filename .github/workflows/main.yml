@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "src/action/iconfont*"
+      - 'src/action/iconfont*'
 
 jobs:
   notify-lark:
@@ -18,12 +18,15 @@ jobs:
         id: changes
         run: |
           git fetch --depth=2
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed.txt
-          ICONFONT_CHANGED=$(grep '^src/action/iconfont' changed.txt || true)
-          echo "CHANGED_FILES=$ICONFONT_CHANGED" >> $GITHUB_ENV
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^src/action/iconfont' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "HAS_CHANGES=true" >> $GITHUB_ENV
+          else
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
+          fi
 
       - name: Send notification to Lark
-        if: env.CHANGED_FILES != ''
+        if: env.HAS_CHANGES == 'true'
         run: |
           curl -X POST "$LARK_WEBHOOK_URL" \
             -H "Content-Type: application/json" \

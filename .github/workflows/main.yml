@@ -1,0 +1,36 @@
+name: Notify Lark on Iconfont Changes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/action/iconfont*'  # 监听特定路径下的改动
+
+jobs:
+  notify-lark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get changed iconfont files
+        id: changes
+        run: |
+          git fetch origin main
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD | grep '^src/action/iconfont' || true)
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+
+      - name: Send notification to Lark
+        if: env.CHANGED_FILES != ''
+        run: |
+          curl -X POST "$LARK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "msg_type": "text",
+              "content": {
+                "text": "🛠️  Iconfont 文件发生变更\n分支：${{ github.ref_name }}\n提交人：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}"
+              }
+            }'
+        env:
+          LARK_WEBHOOK_URL: ${{ secrets.LARK_WEBHOOK_URL }}

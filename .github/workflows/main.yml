@@ -3,13 +3,15 @@ name: Notify Lark on Iconfont Changes
 on:
   push:
     branches:
-      - 'release/**'
+      - main
+      # - 'release/**'
     paths:
       - 'src/action/iconfont*'
   pull_request:
     types: [closed]
     branches:
-      - 'release/**'
+      - main
+      # - 'release/**'
     paths:
       - 'src/action/iconfont*'
 
@@ -39,7 +41,7 @@ jobs:
             -d '{
               "msg_type": "text",
               "content": {
-                "text": "🎯 iconfont 目录有变更\n分支：${{ github.ref_name }}\n提交人：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}"
+                "text": "🎯 iconfont 目录有变更，即使 pull 代码。\n分支：${{ github.ref_name }}\n提交人：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}"
               }
             }'
         env:

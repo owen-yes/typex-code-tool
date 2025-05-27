@@ -3,7 +3,13 @@ name: Notify Lark on Iconfont Changes
 on:
   push:
     branches:
-      - main
+      - 'release/**'
+    paths:
+      - 'src/action/iconfont*'
+  pull_request:
+    types: [closed]
+    branches:
+      - 'release/**'
     paths:
       - 'src/action/iconfont*'
 
